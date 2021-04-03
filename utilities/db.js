@@ -46,7 +46,9 @@ exports.createUser = (req, res) => {
     console.log(result);
     res.sendStatus(200);
   });
-}
+};
+
+
 
 const incrementEndpoint = (endpoint) => {
 
