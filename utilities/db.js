@@ -43,12 +43,21 @@ exports.createUser = (req, res) => {
       return;
     }
 
-    console.log(result);
     res.sendStatus(200);
   });
 };
 
+exports.getUserByID = (req, res) => {
+  const sql_statement = `SELECT username,user_password,name,isAdmin FROM User WHERE userID=?`;
+  db.query(sql_statement, [req.params.userID], (err, result) => {
+    if (err) {
+      res.sendStatus(404);
+      return;
+    }
 
+    res.status(200).json(result);
+  });
+};
 
 const incrementEndpoint = (endpoint) => {
 

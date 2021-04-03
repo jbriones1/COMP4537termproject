@@ -6,9 +6,7 @@ const router = express.Router({mergeParams: true});
 
 router.post('/', queries.createUser);
 
-router.get('/:userID', (req, res) => {
-  res.status(200).send('GET /userID ' + req.params.userID);
-});
+router.get('/:userID', queries.getUserByID);
 
 router.post('/login', (req, res) => {
   res.status(200).send(`POST /login:
