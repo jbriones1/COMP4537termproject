@@ -1,15 +1,10 @@
 'use strict';
 
 const express = require('express');
+const queries = require('../../utilities/db');
 const router = express.Router({mergeParams: true});
 
-router.post('/', (req, res) => {
-  res.status(201).send(`POST:
-  ${req.body.username}
-  ${req.body.password}
-  ${req.body.name}
-  ${req.body.isAdmin}`);
-});
+router.post('/', queries.createUser);
 
 router.get('/:userID', (req, res) => {
   res.status(200).send('GET /userID ' + req.params.userID);
