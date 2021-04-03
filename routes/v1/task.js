@@ -12,7 +12,7 @@ router.route('/:taskID')
   .delete((req, res) => { res.send('DELETE task ' + req.params.taskID); });
 
 router.put('/complete/:taskID', (req, res) => {
-
+  res.send('COMPLETE task ' + req.params.taskID);
 });
 
 
