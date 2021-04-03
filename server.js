@@ -14,8 +14,8 @@ const PORT = process.env.PORT || 3000;
 // 	next();
 // });
 
-app.options('*', cors())
 
+app.use('*', cors());
 app.use(bodyParser.json());
 app.use('/v1', require('./routes/v1'));
 
