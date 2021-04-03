@@ -18,7 +18,7 @@ exports.getAdminStats = (req, res) => {
       res.sendStatus(500);
       return;
     }
-
+    console.log(process.env.DB_HOST);
     console.log(result);
     res.status(200).json(result);
   });
