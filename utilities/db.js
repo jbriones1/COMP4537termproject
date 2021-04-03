@@ -15,7 +15,8 @@ exports.getAdminStats = (req, res) => {
 
   pool.query(query, (err, result) => {
     if (err) {
-      res.status(400).send();
+      res.sendStatus(500);
+      return;
     }
 
     console.log(result);
