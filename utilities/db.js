@@ -15,7 +15,7 @@ exports.getAdminStats = (req, res) => {
 
   pool.query(query, (err, result) => {
     if (err) {
-      res.sendStatus(500);
+      res.status(500).send(process.env.DB_HOST);
       return;
     }
     console.log(process.env.DB_HOST);
