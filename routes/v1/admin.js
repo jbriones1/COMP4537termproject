@@ -2,9 +2,8 @@
 
 const express = require('express');
 const router = express.Router({mergeParams: true});
+const queries = require('../../utilities/db');
 
-router.get('/stats', (req, res) => {
-  res.status(200).send(`${req.body.username}\n${req.body.password}`);
-});
+router.get('/stats', queries.getAdminStats);
 
 module.exports = router;
