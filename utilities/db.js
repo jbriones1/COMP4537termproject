@@ -43,6 +43,7 @@ exports.createUser = (req, res) => {
       return;
     }
 
+    incrementEndpoint(54);
     res.sendStatus(200);
   });
 };
@@ -55,10 +56,18 @@ exports.getUserByID = (req, res) => {
       return;
     }
 
+    incrementEndpoint(84);
     res.status(200).json(result);
   });
 };
 
-const incrementEndpoint = (endpoint) => {
+const incrementEndpoint = (apiID) => {
+  const increment_statement = `UPDATE apiCount SET requests = requests + 1 WHERE apiID = ?`;
 
+  db.query(increment_statement, [apiID], (err, result) => {
+    if (err) {
+      throw err;
+      return;
+    }
+  });
 };
