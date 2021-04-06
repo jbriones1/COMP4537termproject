@@ -1,11 +1,11 @@
 'use strict';
 
 const express = require('express');
-const queries = require('../../utilities/operations/op_user.js');
+const operation = require('../../utilities/operations/op_user.js');
 const router = express.Router({mergeParams: true});
 
-router.post('/', queries.createUser);
+router.post('/', operation.createUser);
 
-router.get('/:userID', queries.getUserByID);
+router.get('/:userID', operation.getUserByID);
 
 module.exports = router;
