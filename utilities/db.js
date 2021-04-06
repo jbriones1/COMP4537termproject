@@ -1,8 +1,5 @@
 const mysql = require('mysql2');
 
-// Required to load database credentials
-require('dotenv').config();
-
 const db = mysql.createPool({
   host: process.env.DB_HOST,
   user: process.env.DB_USER,
