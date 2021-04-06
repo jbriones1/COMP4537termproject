@@ -2,7 +2,7 @@
 
 const express = require('express');
 const router = express.Router({mergeParams: true});
-const queries = require('../../utilities/db');
+const queries = require('../../utilities/operations/op_admin');
 
 router.get('/stats', queries.getAdminStats);
 
