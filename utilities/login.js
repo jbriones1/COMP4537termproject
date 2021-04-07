@@ -2,6 +2,35 @@ const sql = require('./db');
 const token = require('./token');
 const bcrypt = require('bcrypt');
 
+const SALT_ROUNDS = 10;
+
+const register = (req, res) => {
+
+  const username = req.body.username;
+  const password = req.body.password;
+  const name = req.body.name;
+  const isAdmin = req.body.isAdmin;
+
+  if (!req.body.username || !req.body.password || !req.body.name || req.body.isAdmin == undefined) {
+    res.sendStatus(400);
+    return;
+  }
+
+  bcrypt.hash(password, SALT_ROUNDS)
+    .then(hash => {
+      const sql_statement = `INSERT INTO User (username,user_password,name,isAdmin) VALUES (?, ?, ?, ?)`;
+
+      sql.db.query(sql_statement, [username, hash, name, isAdmin])
+        .then(result => {
+          sql.incrementEndpoint(54);
+          res.sendStatus(200);
+        })
+        .catch(err => {
+          return res.sendStatus(500);
+        });
+    });
+};
+
 /**
  * Finds the user using the username and password and returns the result.
  * 
@@ -155,5 +184,6 @@ const logout = (req, res) => {
 module.exports = {
   login,
   logout,
-  refresh
+  refresh,
+  register: register
 }

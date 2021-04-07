@@ -1,29 +1,5 @@
 const sql = require('../db');
 
-const createUser = (req, res) => {
-
-  const username = req.body.username;
-  const password = req.body.password;
-  const name = req.body.name;
-  const isAdmin = req.body.isAdmin;
-
-  if (!req.body.username || !req.body.password || !req.body.name || req.body.isAdmin == undefined) {
-    res.sendStatus(400);
-    return;
-  }
-
-  const sql_statement = `INSERT INTO User (username,user_password,name,isAdmin) VALUES (?, ?, ?, ?)`;
-
-  sql.db.query(sql_statement, [username, password, name, isAdmin])
-  .then(result => {
-    sql.incrementEndpoint(54);
-    res.sendStatus(200);
-  })
-  .catch(err =>{
-    return res.sendStatus(500);   
-  });
-};
-
 const getUserByID = (req, res) => {
 
   const sql_statement = 
@@ -41,6 +17,5 @@ const getUserByID = (req, res) => {
 };
 
 module.exports = {
-  createUser,
   getUserByID
 }

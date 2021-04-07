@@ -1,11 +1,13 @@
 const router = require('express').Router();
 
-const authentication = require('../utilities/login');
+const operations = require('../utilities/login');
 
-router.post('/login', authentication.login);
+router.post('/user', operations.register);
 
-router.post('/token', authentication.refresh);
+router.post('/login', operations.login);
 
-router.delete('/logout', authentication.logout);
+router.post('/token', operations.refresh);
+
+router.delete('/logout', operations.logout);
 
 module.exports = router;
