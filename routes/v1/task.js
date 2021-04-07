@@ -1,7 +1,7 @@
 'use strict';
 
-const express = require('express');
-const router = express.Router({mergeParams: true});
+const router = require('express').Router({mergeParams: true});
+const operations = require('../../utilities/operations/op_admin');
 
 router.get('/', (req, res) => {
   res.send('GET task');

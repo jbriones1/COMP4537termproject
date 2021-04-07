@@ -1,5 +1,7 @@
+'use strict';
 const mysql = require('mysql2');
 
+// Credentials can be found in .env
 const db = mysql.createPool({
   host: process.env.DB_HOST,
   user: process.env.DB_USER,

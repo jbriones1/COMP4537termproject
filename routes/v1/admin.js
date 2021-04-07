@@ -1,9 +1,8 @@
 'use strict';
 
-const express = require('express');
-const router = express.Router({mergeParams: true});
-const queries = require('../../utilities/operations/op_admin');
+const router = require('express').Router({mergeParams: true});
+const operations = require('../../utilities/operations/op_admin');
 
-router.get('/stats', queries.getAdminStats);
+router.get('/stats', operations.getAdminStats);
 
 module.exports = router;

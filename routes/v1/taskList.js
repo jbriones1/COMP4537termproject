@@ -1,7 +1,6 @@
 'use strict';
 
-const express = require('express');
-const router = express.Router({mergeParams: true});
+const router = require('express').Router({mergeParams: true});
 
 router.get('/:userID/today', (req, res) => {
   res.send(`GET today ${req.params.userID}`);

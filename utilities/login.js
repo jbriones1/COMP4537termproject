@@ -1,9 +1,22 @@
+'use strict';
 const sql = require('./db');
 const token = require('./token');
 const bcrypt = require('bcrypt');
 
 const SALT_ROUNDS = 10;
 
+/**
+ * Creates a new user and stores it in the database.
+ * Hashes the password.
+ * 
+ * 200: Success
+ * 400: Missing information
+ * 500: Error storing in the database
+ * 
+ * @param {Object} req request
+ * @param {Object} res result
+ * @returns status code
+ */
 const register = (req, res) => {
 
   const username = req.body.username;
@@ -12,8 +25,7 @@ const register = (req, res) => {
   const isAdmin = req.body.isAdmin;
 
   if (!req.body.username || !req.body.password || !req.body.name || req.body.isAdmin == undefined) {
-    res.sendStatus(400);
-    return;
+    return res.sendStatus(400);
   }
 
   bcrypt.hash(password, SALT_ROUNDS)
@@ -22,20 +34,19 @@ const register = (req, res) => {
 
       sql.db.query(sql_statement, [username, hash, name, isAdmin])
         .then(result => {
-          sql.incrementEndpoint(54);
           res.sendStatus(200);
         })
         .catch(err => {
-          return res.sendStatus(500);
+          res.sendStatus(500);
         });
     });
 };
 
 /**
- * Finds the user using the username and password and returns the result.
+ * Finds the user using the username and password and returns the user object.
  * 
  * @param {String} username 
- * @returns query result
+ * @returns user object
  */
 const getUserByUsername = async (username) => {
 
@@ -53,6 +64,7 @@ const getUserByUsername = async (username) => {
  * Inserts a refresh token into the database.
  * 
  * @param {String} refreshToken 
+ * @returns JSON Web Token
  */
 const insertToken = async (refreshToken) => {
 
@@ -73,8 +85,8 @@ const insertToken = async (refreshToken) => {
 /**
  * Refreshes an access token by using the refresh token.
  * 
- * Returns 200 with a new access token
- * Returns 500 on database error or jwt error
+ * 200: Success
+ * 500: Database or JSON Web Token error
  * 
  * @param {Object} req request
  * @param {Object} res response 
@@ -116,8 +128,8 @@ const refresh = (req, res) => {
  * Returns 200 with the JSON WebToken if the user is authenticated
  * Returns 400 on incorrect credentials
  * 
- * @param {Object} req request object
- * @param {Object} res response object
+ * @param {Object} req request
+ * @param {Object} res response
  * @returns status code
  */
 const login = (req, res) => {
@@ -170,7 +182,6 @@ const login = (req, res) => {
 
 /**
  * Logs the user out by deleting their refresh token.
- * 
  * 
  * @param {Object} req request
  * @param {Object} res response
