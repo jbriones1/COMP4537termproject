@@ -7,6 +7,11 @@ const db = mysql.createPool({
   database: process.env.DB_NAME
 }).promise();
 
+/**
+ * Increments the specific API's value in the database.
+ * 
+ * @param {Integer} apiID 
+ */
 const incrementEndpoint = (apiID) => {
   const increment_statement = `UPDATE apiCount SET requests = requests + 1 WHERE apiID = ?`;
 
