@@ -1,11 +1,42 @@
 const jwt = require('jsonwebtoken');
 
-const generateSessionToken = (username) => {
-  return jwt.sign(username, process.env.TOKEN_SECRET);
+/**
+ * Generates a JSON web token.
+ * Access tokens expire in 30 minutes.
+ * 
+ * @param {Object} user
+ * @returns JSON Web Token
+ */
+const generateAccessToken = (user) => {
+  return jwt.sign(user, process.env.TOKEN_SECRET, { expiresIn: '30m'});
 }
 
+/**
+ * Generates a JSON web token.
+ * Refresh tokens are used to refresh expired access tokens.
+ * 
+ * @param {Object} user 
+ * @returns JSON Web Token
+ */
+const generateRefreshToken = (user) => {
+  return jwt.sign(user, process.env.REFRESH_SECRET);
+}
+
+/**
+ * Attempts to authenticate the JSON Web Token.
+ * Authorization header must come in as "Bearer [token]"
+ * 
+ * Returns 401 on no token
+ * Returns 403 on invalid token
+ * 
+ * @param {Object} req request
+ * @param {Object} res response
+ * @param {Function} next next
+ * @returns status code
+ */
 const authenticateToken = (req, res, next) => {
   const authHeader = req.headers['authorization'];
+
   const token = authHeader && authHeader.split(' ')[1];
 
   if (token == null) return res.sendStatus(401);
@@ -13,15 +44,29 @@ const authenticateToken = (req, res, next) => {
   jwt.verify(token, process.env.TOKEN_SECRET, (err, user) => {
     
     // Token is no longer valid
-    if (err) return res.sendStatus(403)
+    if (err) return res.sendStatus(403);
 
-    req.token = token
+    req.token = token;
 
-    next()
-  })
+    next();
+  });
+}
+
+/**
+ * Verifies a refresh token and creates a new access token if refresh token is valid.
+ * 
+ * @param {String} refreshToken 
+ */
+const verifyRefreshToken = async (refreshToken) => {
+
+    const user = await jwt.verify(refreshToken, process.env.REFRESH_SECRET);
+    delete user.iat;
+    return generateAccessToken(user);;
 }
 
 module.exports = {
-  generateSessionToken,
-  authenticateToken
+  generateAccessToken,
+  generateRefreshToken,
+  authenticateToken,
+  verifyRefreshToken
 }

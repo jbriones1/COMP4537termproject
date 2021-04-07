@@ -4,8 +4,8 @@ const authentication = require('../utilities/login');
 
 router.post('/login', authentication.login);
 
-router.get('/logout', (req, res) => {
-  res.status(200).send('Logged out successfully');
-});
+router.post('/token', authentication.refresh);
+
+router.delete('/logout', authentication.logout);
 
 module.exports = router;

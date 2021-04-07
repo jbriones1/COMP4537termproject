@@ -1,6 +1,6 @@
 const sql = require('../db');
 
-exports.createUser = (req, res) => {
+const createUser = (req, res) => {
 
   const username = req.body.username;
   const password = req.body.password;
@@ -24,14 +24,23 @@ exports.createUser = (req, res) => {
   });
 };
 
-exports.getUserByID = (req, res) => {
+const getUserByID = (req, res) => {
 
-  const sql_statement = `SELECT username,user_password,name,isAdmin FROM User WHERE userID=?`;
+  const sql_statement = 
+    `SELECT username,user_password,name,isAdmin 
+     FROM User 
+     WHERE userID = ?`;
+
   sql.db.query(sql_statement, [req.params.userID])
     .then(result => {
-      sql.incrementEndpoint(84);
+      // sql.incrementEndpoint(84);
       res.status(200).json(result[0]);
     }).catch(err => {
       return res.sendStatus(500);
     });
 };
+
+module.exports = {
+  createUser,
+  getUserByID
+}
