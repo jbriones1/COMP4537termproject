@@ -24,21 +24,36 @@ const register = (req, res) => {
   const name = req.body.name;
   const isAdmin = req.body.isAdmin;
 
+  // Validate all user info is correct
   if (!req.body.username || !req.body.password || !req.body.name || req.body.isAdmin == undefined) {
     return res.sendStatus(400);
   }
 
-  bcrypt.hash(password, SALT_ROUNDS)
-    .then(hash => {
-      const sql_statement = `INSERT INTO User (username,user_password,name,isAdmin) VALUES (?, ?, ?, ?)`;
+  // Find out if the user is unique or not
+  getUserByUsername(username)
+    .then(result => {
 
-      sql.db.query(sql_statement, [username, hash, name, isAdmin])
-        .then(result => {
-          res.sendStatus(200);
-        })
-        .catch(err => {
-          res.sendStatus(500);
-        });
+      // If the username exists already, stop registration
+      if (result.length > 0) return res.sendStatus(409);
+
+      // Hash the password
+      bcrypt.hash(password, SALT_ROUNDS)
+      .then(hash => {
+        const sql_statement =
+          `INSERT INTO User (username,
+                             user_password,
+                             name,
+                             isAdmin) 
+           VALUES (?, ?, ?, ?)`;
+  
+        sql.db.query(sql_statement, [username, hash, name, isAdmin])
+          .then(result => {
+            res.sendStatus(200);
+          })
+          .catch(err => {
+            res.sendStatus(500);
+          });
+      });
     });
 };
 
