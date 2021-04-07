@@ -26,7 +26,6 @@ exports.createUser = (req, res) => {
 
 exports.getUserByID = (req, res) => {
 
-  console.log("running get user");
   const sql_statement = `SELECT username,user_password,name,isAdmin FROM User WHERE userID=?`;
   sql.db.query(sql_statement, [req.params.userID])
     .then(result => {
