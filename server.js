@@ -14,5 +14,4 @@ app.use(express.json());
 app.use('/', require('./routes/authentication'));
 app.use('/v1', require('./routes/v1'));
 
-
-app.listen(PORT, () => console.log(`Example app listening on port ${PORT}!`));
+app.listen(PORT, () => console.log(`Listening on ${PORT}!`));
