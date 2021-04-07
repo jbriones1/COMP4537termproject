@@ -10,12 +10,10 @@ const db = mysql.createPool({
 const incrementEndpoint = (apiID) => {
   const increment_statement = `UPDATE apiCount SET requests = requests + 1 WHERE apiID = ?`;
 
-  db.query(increment_statement, [apiID], (err, result) => {
-    if (err) {
-      res.sendStatus(500);
-      return;
-    }
-  });
+  db.query(increment_statement, [apiID])
+    .catch(err => {
+      return res.status(500).send('Failed to increment');
+    });
 };
 
 module.exports = {
