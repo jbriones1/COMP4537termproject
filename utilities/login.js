@@ -35,18 +35,16 @@ const register = (req, res) => {
  * Finds the user using the username and password and returns the result.
  * 
  * @param {String} username 
- * @param {String} password unhashed password
  * @returns query result
  */
-const getUserByCredentials = async (username, password) => {
+const getUserByUsername = async (username) => {
 
   const query =
     `SELECT * 
      FROM User
-     WHERE username = ? AND
-           user_password = ?`;
+     WHERE username = ?`;
 
-  const result = await sql.db.query(query, [username, password]);
+  const result = await sql.db.query(query, [username]);
 
   return result[0];
 }
@@ -130,32 +128,38 @@ const login = (req, res) => {
   if (!username || !password) return res.sendStatus(400);
 
   // Make sure username and password match
-  getUserByCredentials(username, password)
+  getUserByUsername(username)
     .then(result => {
 
       // There should only be one entry returned
       if (result.length !== 1) return res.sendStatus(400);
 
-      // Remove the password from the payload and turn it into a plain JSON object
+      // Turn it into a plain JSON object
       const user = JSON.parse(JSON.stringify(result[0]));
-      delete user.user_password;
 
-      // Generate an access token (expires after 30 minutes) and a refresh token (expires on logout)
-      const accessToken = token.generateAccessToken(user);
-      const refreshToken = token.generateRefreshToken(user);
+      // Check the username and password
+      bcrypt.compare(password, user.user_password)
+        .then(match => {
+          // Return an error if passwords don't match
+          if (!match) return res.sendStatus(400);
+          // Generate an access token (expires after 30 minutes) and a refresh token (expires on logout)
+          delete user.user_password; // delete the password before creating a token
+          const accessToken = token.generateAccessToken(user);
+          const refreshToken = token.generateRefreshToken(user);
 
-      // Insert the refresh token into the database
-      insertToken(refreshToken)
-        .then(result => {
-          return res.status(200).json({
-            user,
-            accessToken,
-            refreshToken
-          });
-        })
-        .catch(err => {
-          console.log(err);
-          return res.sendStatus(500);
+          // Insert the refresh token into the database
+          insertToken(refreshToken)
+            .then(result => {
+              return res.status(200).json({
+                user,
+                accessToken,
+                refreshToken
+              });
+            })
+            .catch(err => {
+              console.log(err);
+              return res.sendStatus(500);
+            });
         });
     })
     .catch(err => {
