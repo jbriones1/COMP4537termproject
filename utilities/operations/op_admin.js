@@ -5,7 +5,7 @@ exports.getAdminStats = (req, res) => {
 
   sql.db.query(query)
     .then(result => {
-      res.status(200).json(result);
+      res.status(200).json(result[0]);
     }).catch(err => {
       return res.sendStatus(500);
     });
