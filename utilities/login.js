@@ -73,7 +73,7 @@ const getUserByUsername = async (username) => {
   const result = await sql.db.query(query, [username]);
 
   return result[0];
-}
+};
 
 /**
  * Inserts a refresh token into the database.
@@ -95,7 +95,7 @@ const insertToken = async (refreshToken) => {
       console.log(err);
       return;
     })
-}
+};
 
 /**
  * Refreshes an access token by using the refresh token.
@@ -135,7 +135,7 @@ const refresh = (req, res) => {
           return res.sendStatus(500);
         });
     });
-}
+};
 
 /**
  * Logs the user into the application
@@ -193,7 +193,7 @@ const login = (req, res) => {
       console.log(err);
       return res.sendStatus(500);
     });
-}
+};
 
 /**
  * Logs the user out by deleting their refresh token.
@@ -209,11 +209,11 @@ const logout = (req, res) => {
   sql.db.query(query, [req.body.token])
     .then(result => res.sendStatus(200))
     .catch(err => res.sendStatus(500));
-}
+};
 
 module.exports = {
   login,
   logout,
   refresh,
   register: register
-}
+};
