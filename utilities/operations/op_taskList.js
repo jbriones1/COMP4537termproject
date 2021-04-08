@@ -11,7 +11,7 @@ const addTaskList = (req, res) => {
 
   const query = 
     `INSERT INTO taskList
-    SET ?`;
+     SET ?`;
   
   sql.db.query(query, [values])
   .then(result => res.sendStatus(201))
@@ -23,6 +23,21 @@ const addTaskList = (req, res) => {
 
 const deleteTaskList = (req, res) => {
   
+  const query =
+    `DELETE FROM taskList
+     WHERE taskListID = ?`;
+    
+  sql.db.query(query, [req.params.taskListID])
+  .then(([result, _]) => {
+
+    if (result.affectedRows < 1) return res.sendStatus(404);
+
+    res.sendStatus(200);
+  })
+  .catch(err => {
+    console.log(err);
+    res.sendStatus(500);
+  });
 }
 
 const getTaskList = (req, res) => {
