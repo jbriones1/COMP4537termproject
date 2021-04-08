@@ -1,17 +1,14 @@
 'use strict';
 
 const router = require('express').Router({mergeParams: true});
+const operations = require('../../utilities/operations/op_taskList');
 
-router.get('/:userID/today', (req, res) => {
-  res.send(`GET today ${req.params.userID}`);
-});
+router.post('/', operations.addTaskList);
 
-router.get('/:userID/yesterday', (req, res) => {
-  res.send(`GET yesterday ${req.params.userID}`);
-});
+router.get('/:userID/today', operations.getTaskList);
 
-router.delete('/:taskListID', (req, res) => {
-  res.send(`DELETE tasklist ${req.params.taskListID}`);
-});
+router.get('/:userID/yesterday', operations.getTaskListYesterday);
+
+router.delete('/:taskListID', operations.deleteTaskList);
 
 module.exports = router;
