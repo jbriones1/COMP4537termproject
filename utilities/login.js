@@ -140,8 +140,8 @@ const refresh = (req, res) => {
 /**
  * Logs the user into the application
  * 
- * Returns 200 with the JSON WebToken if the user is authenticated
- * Returns 400 on incorrect credentials
+ * 200: with the JSON WebToken if the user is authenticated
+ * 400: on incorrect credentials
  * 
  * @param {Object} req request
  * @param {Object} res response
