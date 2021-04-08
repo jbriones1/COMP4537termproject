@@ -7,7 +7,7 @@ router.post('/', operations.addTaskList);
 
 router.get('/today', operations.getTaskList);
 
-router.get('/yesterday', operations.getTaskListYesterday);
+router.get('/yesterday', operations.getTaskList);
 
 router.delete('/:taskListID', operations.deleteTaskList);
 

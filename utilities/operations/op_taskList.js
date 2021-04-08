@@ -1,5 +1,12 @@
 const sql = require('../db');
 
+/**
+ * Adds a task list.
+ * 
+ * @param {Object} req request
+ * @param {Object} res result
+ * @returns status code
+ */
 const addTaskList = (req, res) => {
 
   const { userID, date } =  req.body;
@@ -19,6 +26,13 @@ const addTaskList = (req, res) => {
   });
 }
 
+/**
+ * Deletes a task list.
+ * 
+ * @param {Object} req request
+ * @param {Object} res result
+ * @returns status code
+ */
 const deleteTaskList = (req, res) => {
   
   const query =
@@ -38,6 +52,18 @@ const deleteTaskList = (req, res) => {
   });
 }
 
+/**
+ * Get a task list with all its tasks.
+ * 
+ * 200: task list with tasks
+ * 400: invalid body
+ * 404: task list not found
+ * 500: database error 
+ * 
+ * @param {Object} req request
+ * @param {Object} res result
+ * @returns status code
+ */
 const getTaskList = async (req, res) => {
 
   const { userID, date } = req.body;
@@ -77,13 +103,8 @@ const getTaskList = async (req, res) => {
 
 }
 
-const getTaskListYesterday = (req, res) => {
-  
-}
-
 module.exports = {
   addTaskList,
   deleteTaskList,
-  getTaskList,
-  getTaskListYesterday
+  getTaskList
 }
