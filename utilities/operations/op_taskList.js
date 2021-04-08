@@ -80,6 +80,7 @@ const getTaskList = async (req, res) => {
   
   try {
 
+    // Find the task list and see if it exists
     const q1 = 
       `SELECT taskListID 
        FROM taskList 
@@ -88,8 +89,10 @@ const getTaskList = async (req, res) => {
 
     const [taskList, _1] = await sql.db.query(q1, [userID, date]);
 
+    // If the task list doesn't exist, end with 404
     if (taskList.length < 1) return res.sendStatus(404);
 
+    // If the task list exists, find the tasks that are a part of it
     const q2 = 
       `SELECT taskID,taskName,taskDescription,isComplete
        FROM task 
