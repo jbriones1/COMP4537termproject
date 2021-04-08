@@ -13,21 +13,26 @@ const sql = require('../db');
  */
 const addTaskList = (req, res) => {
 
-  const { userID, date } =  req.body;
+  const {
+    userID,
+    date
+  } = req.body;
 
+  if (userID == null || !date) return res.sendStatus(400);
 
-  if (!userID || !date) return res.sendStatus(400);
-
-  const query = 
+  const query =
     `INSERT INTO taskList
      SET ?`;
-  
-  sql.db.query(query, [{ userID, date }])
-  .then(_ => res.sendStatus(201))
-  .catch(err => {
-    console.log(err);
-    res.sendStatus(500);
-  });
+
+  sql.db.query(query, [{
+      userID,
+      date
+    }])
+    .then(_ => res.sendStatus(201))
+    .catch(err => {
+      console.log(err);
+      res.sendStatus(500);
+    });
 }
 
 /**
@@ -42,22 +47,22 @@ const addTaskList = (req, res) => {
  * @returns status code
  */
 const deleteTaskList = (req, res) => {
-  
+
   const query =
     `DELETE FROM taskList
      WHERE taskListID = ?`;
-    
+
   sql.db.query(query, [req.params.taskListID])
-  .then(([result, _]) => {
+    .then(([result, _]) => {
 
-    if (result.affectedRows < 1) return res.sendStatus(404);
+      if (result.affectedRows < 1) return res.sendStatus(404);
 
-    res.sendStatus(200);
-  })
-  .catch(err => {
-    console.log(err);
-    res.sendStatus(500);
-  });
+      res.sendStatus(200);
+    })
+    .catch(err => {
+      console.log(err);
+      res.sendStatus(500);
+    });
 }
 
 /**
@@ -74,14 +79,17 @@ const deleteTaskList = (req, res) => {
  */
 const getTaskList = async (req, res) => {
 
-  const { userID, date } = req.body;
+  const {
+    userID,
+    date
+  } = req.body;
 
   if (!userID, !date) return res.sendStatus(400)
-  
+
   try {
 
     // Find the task list and see if it exists
-    const q1 = 
+    const q1 =
       `SELECT taskListID 
        FROM taskList 
        WHERE userID = ? 
@@ -93,7 +101,7 @@ const getTaskList = async (req, res) => {
     if (taskList.length < 1) return res.sendStatus(404);
 
     // If the task list exists, find the tasks that are a part of it
-    const q2 = 
+    const q2 =
       `SELECT taskID,taskName,taskDescription,isComplete
        FROM task 
        WHERE taskListID = ?`;
