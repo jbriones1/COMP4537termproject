@@ -3,6 +3,10 @@ const sql = require('../db');
 /**
  * Adds a task list.
  * 
+ * 201: success
+ * 400: invalid body
+ * 500: database error
+ * 
  * @param {Object} req request
  * @param {Object} res result
  * @returns status code
@@ -28,6 +32,10 @@ const addTaskList = (req, res) => {
 
 /**
  * Deletes a task list.
+ * 
+ * 200: success
+ * 404: task not found
+ * 500: database error
  * 
  * @param {Object} req request
  * @param {Object} res result
