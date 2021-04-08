@@ -40,6 +40,18 @@ const addTask = (req, res) => {
     });
 }
 
+/**
+ * Mark a task complete.
+ * 
+ * 200: success
+ * 400: invalid taskID
+ * 404: task not found
+ * 500: database error
+ * 
+ * @param {Object} req request
+ * @param {Object} res result
+ * @returns status code
+ */
 const completeTask = (req, res) => {
 
   if (req.params.taskID == null) return res.sendStatus(400);
@@ -62,7 +74,37 @@ const completeTask = (req, res) => {
     });
 }
 
+/**
+ * Delete a task.
+ * 
+ * 200: success
+ * 400: invalid taskID
+ * 404: task not found
+ * 500: database error
+ * 
+ * @param {Object} req request
+ * @param {Object} res result
+ * @returns status code
+ */
 const deleteTask = (req, res) => {
+
+  if (req.params.taskID == null) return res.sendStatus(400);
+
+  const query =
+    `DELETE FROM task
+     WHERE taskID = ?`;
+
+  sql.db.query(query, [req.params.taskID])
+    .then(([result, _]) => {
+
+      if (result.affectedRows < 1) return res.sendStatus(404);
+
+      res.sendStatus(200);
+    })
+    .catch(err => {
+      console.log(err);
+      res.sendStatus(500);
+    });
 
 }
 
