@@ -5,6 +5,8 @@ const operations = require('../../utilities/operations/op_task');
 
 router.post('/', operations.addTask);
 
+router.post('/moveTasks', operations.moveTasks);
+
 router.route('/:taskID')
   .put(operations.updateTask)
   .delete(operations.deleteTask);

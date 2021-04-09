@@ -13,10 +13,7 @@ const sql = require('../db');
  */
 const addTaskList = (req, res) => {
 
-  const {
-    userID,
-    date
-  } = req.body;
+  const { userID, date } = req.body;
 
   if (userID == null || !date) return res.sendStatus(400);
 
@@ -24,11 +21,11 @@ const addTaskList = (req, res) => {
     `INSERT INTO taskList
      SET ?`;
 
-  sql.db.query(query, [{
-      userID,
-      date
-    }])
-    .then(_ => res.sendStatus(201))
+  sql.db.query(query, [{ userID, date }])
+    .then(([results, ]) => {
+      console.log(results);
+      res.sendStatus(201)
+    })
     .catch(err => {
       console.log(err);
       res.sendStatus(500);
