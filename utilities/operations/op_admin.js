@@ -1,5 +1,11 @@
 const sql = require('../db');
 
+/**
+ * Gets the admin stats for API requests.
+ * 
+ * @param {Object} req request
+ * @param {Object} res result
+ */
 exports.getAdminStats = (req, res) => {
   const query = 'SELECT * FROM apicount';
 
