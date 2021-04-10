@@ -1,5 +1,5 @@
-const sql = require("../db");
-const { getUserFromToken } = require("../token");
+const sql = require('../db');
+const { getUserFromToken } = require('../token');
 
 /**
  * Adds a task list.

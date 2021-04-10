@@ -1,5 +1,5 @@
-const sql = require("../db");
-const { getUserFromToken } = require("../token");
+const sql = require('../db');
+const { getUserFromToken } = require('../token');
 
 /**
  * Gets the user from the database by userID.
@@ -17,7 +17,7 @@ const getUserByID = async (req, res) => {
       FROM User 
       WHERE userID = ?`;
 
-    const [result,] = await sql.db.query(sql_statement, [userID]);
+    const [result] = await sql.db.query(sql_statement, [userID]);
 
     sql.incrementEndpoint(54);
     res.status(200).json(result[0]);
