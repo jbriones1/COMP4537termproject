@@ -64,9 +64,14 @@ const verifyRefreshToken = async (refreshToken) => {
     return generateAccessToken(user);;
 }
 
+const getUserFromToken = async (accessToken) => {
+  return await jwt.verify(accessToken, process.env.TOKEN_SECRET);
+}
+
 module.exports = {
   generateAccessToken,
   generateRefreshToken,
   authenticateToken,
-  verifyRefreshToken
+  verifyRefreshToken,
+  getUserFromToken
 }

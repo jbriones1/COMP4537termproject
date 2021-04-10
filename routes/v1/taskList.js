@@ -5,7 +5,7 @@ const operations = require('../../utilities/operations/op_taskList');
 
 router.post('/', operations.addTaskList);
 
-router.get('/', operations.getTaskList);
+router.get('/:user/:date', operations.getTaskList);
 
 router.delete('/:taskListID', operations.deleteTaskList);
 
