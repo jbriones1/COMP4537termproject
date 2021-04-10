@@ -62,7 +62,7 @@ const completeTask = (req, res) => {
      WHERE taskID=?`;
 
   sql.db.query(query, [req.params.taskID])
-    .then(([result, _]) => {
+    .then(([result,]) => {
 
       if (result.affectedRows < 1) return res.sendStatus(404);
 
@@ -138,13 +138,13 @@ const moveTasks = async (req, res) => {
 
     const [result1, ] = await sql.db.query(q1, [userID, date]);
 
+    // If there is no task list for today, return a 404
     if (result1.length < 1) return res.sendStatus(404);
 
     const currTaskListID = result1[0].taskListID;
     
     // Create a taskList for the next day
     const nextDate = addDay(date);
-
     const q2 =
       `INSERT INTO taskList
         SET ?`;
@@ -153,7 +153,6 @@ const moveTasks = async (req, res) => {
     const newTaskListID = result2.insertId;
     console.log(newTaskListID);
 
-    
     // Set all incomplete tasks for today to tomorrow
     const q3 = 
       `UPDATE task
@@ -164,7 +163,6 @@ const moveTasks = async (req, res) => {
     await sql.db.query(q3, [newTaskListID, currTaskListID]);
 
     res.sendStatus(200);
-    
   } catch (error) {
     console.log(error);
     return res.sendStatus(500);
@@ -190,8 +188,48 @@ const addDay = (date) => {
   return nextDate.toISOString().split('T')[0];
 }
 
+/**
+ * Changes the task's name, description and completion status.
+ * 
+ * 200: success
+ * 400: invalid body
+ * 404: no matching task found
+ * 500: database error
+ * 
+ * @param {Object} req request
+ * @param {Object} res result
+ * @returns status code
+ */
 const updateTask = (req, res) => {
 
+  // Check if the taskID is there
+  const taskID = req.params.taskID;
+  if (taskID == null) return res.sendStatus(400);
+
+  // Check that a proper body was sent
+  const { taskName, taskDescription, isComplete } = req.body;
+  if (!taskName || !taskDescription || isComplete == null) return res.sendStatus(400);
+
+  // Change the task based on the body data
+  const query = 
+    `UPDATE task
+     SET taskName = ?,
+         taskDescription = ?,
+         isComplete = ?
+     WHERE taskID = ?`;
+  
+  sql.db.query(query, [taskName, taskDescription, isComplete, taskID])
+  .then(([result,]) => {
+    
+    // If no task matches the taskID, send a 404
+    if (result.affectedRows < 1) return res.sendStatus(404);
+
+    res.sendStatus(200);
+  })
+  .catch(err => {
+    console.log(err);
+    res.sendStatus(500);
+  });
 }
 
 module.exports = {
