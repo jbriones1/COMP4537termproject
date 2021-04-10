@@ -3,7 +3,7 @@ const sql = require('../db');
 /**
  * Adds a task.
  * 
- * 200: success
+ * 201: success
  * 400: invalid body
  * 500: database error
  * 
@@ -35,7 +35,7 @@ const addTask = (req, res) => {
     }])
     .then(result => {
       sql.incrementEndpoint(4);
-      res.sendStatus(200);
+      res.sendStatus(201);
     })
     .catch(err => {
       console.log(err);

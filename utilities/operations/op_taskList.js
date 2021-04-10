@@ -91,7 +91,7 @@ const getTaskList = async (req, res) => {
     date
   } = req.body;
 
-  if (!userID, !date) return res.sendStatus(400)
+  if (userID == null || !date) return res.sendStatus(400)
 
   try {
 
