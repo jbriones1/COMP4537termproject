@@ -15,10 +15,12 @@ const { getUserFromToken } = require("../token");
 const addTaskList = async (req, res) => {
   const { date } = req.query;
 
+  if (!date) return res.sendStatus(400);
+
   try {
     const { userID } = await getUserFromToken(req.token);
 
-    if (userID == null || !date) return res.sendStatus(400);
+    if (userID == null) return res.sendStatus(400);
 
     const query = `INSERT INTO taskList
      SET ?`;
@@ -88,11 +90,15 @@ const deleteTaskList = async (req, res) => {
  * @returns status code
  */
 const getTaskList = async (req, res) => {
-  const date = req.query;
+  const { date } = req.query;
 
-  if (userID == null || !date) return res.sendStatus(400);
+  if (!date) return res.sendStatus(400);
 
   try {
+    const { userID } = await getUserFromToken(req.token);
+
+    if (userID == null) return res.sendStatus(400);
+
     // Find the task list and see if it exists
     const q1 = `SELECT taskListID 
        FROM taskList 

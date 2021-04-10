@@ -1,4 +1,5 @@
 const sql = require('../db');
+const { getUserFromToken } = require('../token');
 
 /**
  * Adds a task.
@@ -128,11 +129,15 @@ const deleteTask = (req, res) => {
  */
 const moveTasks = async (req, res) => {
 
-  const { userID, date } = req.body;
+  const { date } = req.query;
 
-  if (userID == null || !date) return res.sendStatus(400);
+  if (!date) return res.sendStatus(400);
   
   try {
+
+    const { userID } = await getUserFromToken(req.token);
+
+    if (userID == null) return res.sendStatus(400);
 
     // Find the task list for the current day
     const q1 = 
