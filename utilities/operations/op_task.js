@@ -33,7 +33,10 @@ const addTask = (req, res) => {
       isComplete,
       taskListID
     }])
-    .then(result => res.sendStatus(200))
+    .then(result => {
+      sql.incrementEndpoint(4);
+      res.sendStatus(200);
+    })
     .catch(err => {
       console.log(err);
       res.sendStatus(500);
@@ -66,6 +69,7 @@ const completeTask = (req, res) => {
 
       if (result.affectedRows < 1) return res.sendStatus(404);
 
+      sql.incrementEndpoint(44);
       res.sendStatus(200);
     })
     .catch(err => {
@@ -99,6 +103,7 @@ const deleteTask = (req, res) => {
 
       if (result.affectedRows < 1) return res.sendStatus(404);
 
+      sql.incrementEndpoint(34);
       res.sendStatus(200);
     })
     .catch(err => {
@@ -151,7 +156,6 @@ const moveTasks = async (req, res) => {
     
     const [result2, ] = await sql.db.query(q2, [{ userID, date: nextDate }]);
     const newTaskListID = result2.insertId;
-    console.log(newTaskListID);
 
     // Set all incomplete tasks for today to tomorrow
     const q3 = 
@@ -162,6 +166,7 @@ const moveTasks = async (req, res) => {
 
     await sql.db.query(q3, [newTaskListID, currTaskListID]);
 
+    sql.incrementEndpoint(14);
     res.sendStatus(200);
   } catch (error) {
     console.log(error);
@@ -224,6 +229,7 @@ const updateTask = (req, res) => {
     // If no task matches the taskID, send a 404
     if (result.affectedRows < 1) return res.sendStatus(404);
 
+    sql.incrementEndpoint(24);
     res.sendStatus(200);
   })
   .catch(err => {

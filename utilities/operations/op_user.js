@@ -16,7 +16,7 @@ const getUserByID = (req, res) => {
 
   sql.db.query(sql_statement, [req.params.userID])
     .then(result => {
-      sql.incrementEndpoint(84);
+      sql.incrementEndpoint(54);
       res.status(200).json(result[0]);
     }).catch(err => {
       res.sendStatus(500);

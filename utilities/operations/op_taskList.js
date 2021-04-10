@@ -22,8 +22,8 @@ const addTaskList = (req, res) => {
      SET ?`;
 
   sql.db.query(query, [{ userID, date }])
-    .then(([results, ]) => {
-      console.log(results);
+    .then(results => {
+      sql.incrementEndpoint(64);
       res.sendStatus(201)
     })
     .catch(err => {
@@ -36,30 +36,40 @@ const addTaskList = (req, res) => {
  * Deletes a task list.
  * 
  * 200: success
- * 404: task not found
+ * 400: invalid parameter
+ * 404: task list not found
  * 500: database error
  * 
  * @param {Object} req request
  * @param {Object} res result
  * @returns status code
  */
-const deleteTaskList = (req, res) => {
+const deleteTaskList = async (req, res) => {
 
-  const query =
-    `DELETE FROM taskList
-     WHERE taskListID = ?`;
+  if (req.params.taskListID == null) return res.sendStatus(400);
 
-  sql.db.query(query, [req.params.taskListID])
-    .then(([result, _]) => {
+  try {
 
-      if (result.affectedRows < 1) return res.sendStatus(404);
+    const q1 =
+      `DELETE FROM task
+      WHERE taskListID = ?`;
 
-      res.sendStatus(200);
-    })
-    .catch(err => {
-      console.log(err);
-      res.sendStatus(500);
-    });
+    await sql.db.query(q1, [req.params.taskListID]);
+
+    const q2 =
+      `DELETE from taskList
+       WHERE taskListID = ?`;
+
+    const [result, ] = await sql.db.query(q2, [req.params.taskListID]);
+
+    if (result.affectedRows < 1) return res.sendStatus(404);
+
+    sql.incrementEndpoint(84);
+    res.sendStatus(200);
+  } catch (error) {
+    console.log(error);
+    res.sendStatus(500);
+  }
 }
 
 /**
@@ -110,8 +120,8 @@ const getTaskList = async (req, res) => {
       tasks: tasks
     }
 
+    sql.incrementEndpoint(74);
     res.status(200).json(results);
-
   } catch (err) {
     console.log(err)
     res.sendStatus(500);
