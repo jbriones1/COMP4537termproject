@@ -62,7 +62,7 @@ const addTask = (req, res) => {
  * @returns status code
  */
 const completeTask = (req, res) => {
-  if (req.params.taskID == null || typeof req.params.taskID !== 'number')
+  if (req.params.taskID == null || !parseInt(req.params.taskID))
     return res.sendStatus(400);
 
   const query = `UPDATE task
