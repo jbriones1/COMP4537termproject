@@ -9,7 +9,11 @@ const PORT = process.env.PORT || 3000;
 
 dotenv.config();
 
-app.use('*', cors());
+const corsOptions = {
+  origin: 'https://schedulr-bl.herokuapp.com'
+};
+
+app.use(cors(corsOptions));
 app.use(express.json());
 app.use('/', require('./routes/authentication'));
 app.use('/v1', require('./routes/v1'));
